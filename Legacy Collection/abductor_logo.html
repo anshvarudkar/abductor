@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abductor - Game Logo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f4d 50%, #2a1f3d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial Black', sans-serif;
+        }
+        
+        .logo-container {
+            text-align: center;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 120px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #00ffff, #ff00ff, #ffff00);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite, glow 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 200, 0.5);
+            letter-spacing: 8px;
+            margin: 0;
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #00ffaa;
+            margin-top: 10px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 200, 0.7)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.9)); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        .ufo-icon {
+            width: 200px;
+            height: 100px;
+            margin: 30px auto;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        canvas {
+            display: block;
+            margin: 30px auto;
+            border: 3px solid #00ffaa;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="logo-container">
+        <h1 class="title">ABDUCTOR</h1>
+        <p class="subtitle">Consume The Multiverse</p>
+        
+        <div class="ufo-icon">
+            <canvas id="ufoCanvas" width="200" height="100"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        // Create animated stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Draw UFO icon
+        const canvas = document.getElementById('ufoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function drawUFO() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Beam of light
+            const beamGradient = ctx.createLinearGradient(100, 60, 100, 100);
+            beamGradient.addColorStop(0, 'rgba(0, 255, 200, 0.3)');
+            beamGradient.addColorStop(1, 'rgba(0, 255, 200, 0.0)');
+            
+            ctx.fillStyle = beamGradient;
+            ctx.beginPath();
+            ctx.moveTo(80, 60);
+            ctx.lineTo(50, 100);
+            ctx.lineTo(150, 100);
+            ctx.lineTo(120, 60);
+            ctx.closePath();
+            ctx.fill();
+            
+            // UFO dome
+            ctx.fillStyle = '#4dd8ff';
+            ctx.beginPath();
+            ctx.arc(100, 35, 30, 0, Math.PI, true);
+            ctx.fill();
+            
+            // Dome highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.beginPath();
+            ctx.arc(90, 30, 12, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // UFO body
+            ctx.fillStyle = '#00ffaa';
+            ctx.beginPath();
+            ctx.ellipse(100, 50, 60, 20, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Body detail line
+            ctx.strokeStyle = '#00cc88';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(100, 50, 60, 10, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Lights
+            const lights = [-35, -15, 5, 25, 45];
+            lights.forEach((offset, i) => {
+                const time = Date.now() / 500;
+                const alpha = 0.5 + Math.sin(time + i) * 0.5;
+                ctx.fillStyle = `rgba(255, 255, 0, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(100 + offset, 55, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(drawUFO);
+        }
+        
+        drawUFO();
+    </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abductor - Character & Enemy Designs</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1f4d 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+        
+        h2 {
+            color: #00ffaa;
+            text-align: center;
+            font-size: 32px;
+            margin: 30px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .design-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #00ffaa;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
+        }
+        
+        .section-title {
+            color: #4dd8ff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .ufo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .ufo-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #00ffaa;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .ufo-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.5);
+        }
+        
+        .ufo-label {
+            color: #00ffaa;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .ufo-size {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        canvas {
+            display: block;
+            margin: 10px auto;
+            border-radius: 8px;
+        }
+        
+        .enemy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .enemy-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #ff0066;
+            text-align: center;
+        }
+        
+        .enemy-label {
+            color: #ff0066;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .enemy-stats {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        
+        .animate-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #00ffaa;
+            border: none;
+            border-radius: 5px;
+            color: #0a0e27;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .animate-btn:hover {
+            background: #00ff88;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <h2>🛸 Abductor - Characters & Enemies 🛸</h2>
+    
+    <!-- UFO Growth Stages -->
+    <div class="design-section">
+        <div class="section-title">UFO Growth Stages</div>
+        <div class="ufo-grid">
+            <div class="ufo-card">
+                <div class="ufo-label">Stage 1 - Starter</div>
+                <canvas id="ufo1" width="150" height="150"></canvas>
+                <div class="ufo-size">Small - Can abduct trees & people</div>
+                <button class="animate-btn" onclick="animateUFO('ufo1', 1)">Show Beam</button>
+            </div>
+            
+            <div class="ufo-card">
+                <div class="ufo-label">Stage 2 - Growing</div>
+                <canvas id="ufo2" width="180" height="180"></canvas>
+                <div class="ufo-size">Medium - Can abduct cars & shops</div>
+                <button class="animate-btn" onclick="animateUFO('ufo2', 2)">Show Beam</button>
+            </div>
+            
+            <div class="ufo-card">
+                <div class="ufo-label">Stage 3 - Large</div>
+                <canvas id="ufo3" width="220" height="220"></canvas>
+                <div class="ufo-size">Large - Can abduct buildings</div>
+                <button class="animate-btn" onclick="animateUFO('ufo3', 3)">Show Beam</button>
+            </div>
+            
+            <div class="ufo-card">
+                <div class="ufo-label">Stage 4 - Massive</div>
+                <canvas id="ufo4" width="250" height="250"></canvas>
+                <div class="ufo-size">Massive - Can abduct skyscrapers</div>
+                <button class="animate-btn" onclick="animateUFO('ufo4', 4)">Show Beam</button>
+            </div>
+            
+            <div class="ufo-card">
+                <div class="ufo-label">Stage 5 - Planet Eater</div>
+                <canvas id="ufo5" width="280" height="280"></canvas>
+                <div class="ufo-size">Colossal - Can abduct planets</div>
+                <button class="animate-btn" onclick="animateUFO('ufo5', 5)">Show Beam</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enemy Designs -->
+    <div class="design-section">
+        <div class="section-title">Enemy Designs</div>
+        <div class="enemy-grid">
+            <div class="enemy-card">
+                <div class="enemy-label">Enemy Starship</div>
+                <canvas id="starship" width="250" height="200"></canvas>
+                <div class="enemy-stats">
+                    ❤️ Health: 3 hits<br>
+                    💥 Attacks UFO with lasers<br>
+                    💀 Falls when destroyed
+                </div>
+                <button class="animate-btn" onclick="animateStarship()">Fire Laser</button>
+            </div>
+            
+            <div class="enemy-card">
+                <div class="enemy-label">Human Defender</div>
+                <canvas id="human" width="250" height="200"></canvas>
+                <div class="enemy-stats">
+                    🧪 Throws particles & potions<br>
+                    🎯 Must be blocked or dodged<br>
+                    🛸 Can be abducted when small
+                </div>
+                <button class="animate-btn" onclick="animateHuman()">Throw Potion</button>
+            </div>
+            
+            <div class="enemy-card">
+                <div class="enemy-label">Skyscraper Hazard</div>
+                <canvas id="building" width="250" height="200"></canvas>
+                <div class="enemy-stats">
+                    🏢 Tall static obstacle<br>
+                    💥 Damages UFO on collision<br>
+                    🛸 Abductable when UFO is large
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // UFO Drawing Function
+        function drawUFO(canvasId, size, showBeam = false) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Scale based on stage
+            const scale = 0.2 + (size * 0.15);
+            const baseSize = 100;
+            const ufoWidth = baseSize * scale;
+            const ufoHeight = (baseSize / 3) * scale;
+            const domeRadius = (baseSize / 3) * scale;
+            
+            // Abduction beam
+            if (showBeam) {
+                const beamGradient = ctx.createLinearGradient(centerX, centerY + domeRadius, centerX, canvas.height);
+                beamGradient.addColorStop(0, 'rgba(0, 255, 200, 0.6)');
+                beamGradient.addColorStop(0.5, 'rgba(0, 255, 200, 0.3)');
+                beamGradient.addColorStop(1, 'rgba(0, 255, 200, 0.0)');
+                
+                ctx.fillStyle = beamGradient;
+                ctx.beginPath();
+                ctx.moveTo(centerX - ufoWidth/3, centerY + domeRadius);
+                ctx.lineTo(centerX - ufoWidth/2, canvas.height);
+                ctx.lineTo(centerX + ufoWidth/2, canvas.height);
+                ctx.lineTo(centerX + ufoWidth/3, centerY + domeRadius);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Beam particles
+                for (let i = 0; i < 10; i++) {
+                    const x = centerX + (Math.random() - 0.5) * ufoWidth;
+                    const y = centerY + domeRadius + Math.random() * (canvas.height - centerY - domeRadius);
+                    ctx.fillStyle = `rgba(0, 255, 200, ${Math.random() * 0.8})`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.random() * 3 + 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // UFO dome (glass bubble on top)
+            const gradient = ctx.createRadialGradient(
+                centerX - domeRadius/3, centerY - domeRadius/3, 0,
+                centerX, centerY, domeRadius
+            );
+            gradient.addColorStop(0, '#6df1ff');
+            gradient.addColorStop(0.6, '#4dd8ff');
+            gradient.addColorStop(1, '#2db8dd');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - domeRadius/2, domeRadius, 0, Math.PI, true);
+            ctx.fill();
+            
+            // Dome highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.beginPath();
+            ctx.arc(centerX - domeRadius/3, centerY - domeRadius, domeRadius/2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Main UFO body
+            const bodyGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, ufoWidth);
+            bodyGradient.addColorStop(0, '#00ffcc');
+            bodyGradient.addColorStop(0.7, '#00ffaa');
+            bodyGradient.addColorStop(1, '#00cc88');
+            
+            ctx.fillStyle = bodyGradient;
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, ufoWidth, ufoHeight, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Body rim detail
+            ctx.strokeStyle = '#00cc88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, ufoWidth, ufoHeight/2, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Glowing lights on bottom
+            const lightCount = 3 + size;
+            for (let i = 0; i < lightCount; i++) {
+                const angle = (i / lightCount) * Math.PI * 2;
+                const lightX = centerX + Math.cos(angle) * ufoWidth * 0.7;
+                const lightY = centerY + Math.sin(angle) * ufoHeight * 0.7;
+                
+                const lightGradient = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, 8);
+                lightGradient.addColorStop(0, '#ffff00');
+                lightGradient.addColorStop(0.5, '#ffaa00');
+                lightGradient.addColorStop(1, 'rgba(255, 170, 0, 0)');
+                
+                ctx.fillStyle = lightGradient;
+                ctx.beginPath();
+                ctx.arc(lightX, lightY, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#ffff00';
+                ctx.beginPath();
+                ctx.arc(lightX, lightY, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Metallic shine
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - ufoHeight/3, ufoWidth * 0.8, ufoHeight/3, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        // Starship Drawing
+        function drawStarship(showLaser = false) {
+            const canvas = document.getElementById('starship');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const centerY = 80;
+            
+            // Starship body
+            ctx.fillStyle = '#666666';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 40);
+            ctx.lineTo(centerX + 50, centerY + 20);
+            ctx.lineTo(centerX + 30, centerY + 30);
+            ctx.lineTo(centerX - 30, centerY + 30);
+            ctx.lineTo(centerX - 50, centerY + 20);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Cockpit
+            ctx.fillStyle = '#ff0066';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Cockpit glow
+            const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 15);
+            glow.addColorStop(0, 'rgba(255, 0, 102, 0.8)');
+            glow.addColorStop(1, 'rgba(255, 0, 102, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Wings
+            ctx.fillStyle = '#888888';
+            ctx.beginPath();
+            ctx.moveTo(centerX - 30, centerY + 10);
+            ctx.lineTo(centerX - 70, centerY + 30);
+            ctx.lineTo(centerX - 60, centerY + 40);
+            ctx.lineTo(centerX - 30, centerY + 25);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX + 30, centerY + 10);
+            ctx.lineTo(centerX + 70, centerY + 30);
+            ctx.lineTo(centerX + 60, centerY + 40);
+            ctx.lineTo(centerX + 30, centerY + 25);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Engine glow
+            ctx.fillStyle = '#00aaff';
+            ctx.beginPath();
+            ctx.arc(centerX - 45, centerY + 35, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 45, centerY + 35, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Laser beam
+            if (showLaser) {
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineWidth = 4;
+                ctx.shadowColor = '#ff0000';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY + 30);
+                ctx.lineTo(centerX, canvas.height);
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+                
+                // Laser impact
+                ctx.fillStyle = '#ff0000';
+                ctx.beginPath();
+                ctx.arc(centerX, canvas.height - 10, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Health indicators
+            for (let i = 0; i < 3; i++) {
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(centerX - 20 + (i * 20), centerY - 50, 5, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+        
+        // Human Drawing
+        function drawHuman(throwingPotion = false) {
+            const canvas = document.getElementById('human');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const groundY = 150;
+            
+            // Head
+            ctx.fillStyle = '#ffcc99';
+            ctx.beginPath();
+            ctx.arc(centerX, groundY - 80, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Body
+            ctx.fillStyle = '#3366ff';
+            ctx.fillRect(centerX - 15, groundY - 60, 30, 40);
+            
+            // Arms
+            ctx.strokeStyle = '#ffcc99';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            
+            if (throwingPotion) {
+                // Throwing arm
+                ctx.beginPath();
+                ctx.moveTo(centerX + 15, groundY - 50);
+                ctx.lineTo(centerX + 40, groundY - 80);
+                ctx.stroke();
+            } else {
+                // Normal arms
+                ctx.beginPath();
+                ctx.moveTo(centerX - 15, groundY - 50);
+                ctx.lineTo(centerX - 35, groundY - 30);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX + 15, groundY - 50);
+                ctx.lineTo(centerX + 35, groundY - 30);
+                ctx.stroke();
+            }
+            
+            // Legs
+            ctx.fillStyle = '#2255aa';
+            ctx.fillRect(centerX - 15, groundY - 20, 12, 30);
+            ctx.fillRect(centerX + 3, groundY - 20, 12, 30);
+            
+            // Ground
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY + 10);
+            ctx.lineTo(canvas.width, groundY + 10);
+            ctx.stroke();
+            
+            // Potion
+            if (throwingPotion) {
+                const potionX = centerX + 50;
+                const potionY = groundY - 90;
+                
+                // Potion bottle
+                ctx.fillStyle = '#ff00ff';
+                ctx.beginPath();
+                ctx.arc(potionX, potionY, 10, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Potion glow
+                const potionGlow = ctx.createRadialGradient(potionX, potionY, 0, potionX, potionY, 15);
+                potionGlow.addColorStop(0, 'rgba(255, 0, 255, 0.8)');
+                potionGlow.addColorStop(1, 'rgba(255, 0, 255, 0)');
+                ctx.fillStyle = potionGlow;
+                ctx.beginPath();
+                ctx.arc(potionX, potionY, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Motion trail
+                for (let i = 1; i <= 3; i++) {
+                    ctx.fillStyle = `rgba(255, 0, 255, ${0.5 - i * 0.15})`;
+                    ctx.beginPath();
+                    ctx.arc(potionX - i * 10, potionY + i * 5, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+        
+        // Building Drawing
+        function drawBuilding() {
+            const canvas = document.getElementById('building');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const buildingWidth = 80;
+            const buildingHeight = 160;
+            const groundY = 180;
+            
+            // Building body
+            const buildingGradient = ctx.createLinearGradient(centerX - buildingWidth/2, 0, centerX + buildingWidth/2, 0);
+            buildingGradient.addColorStop(0, '#555555');
+            buildingGradient.addColorStop(0.5, '#666666');
+            buildingGradient.addColorStop(1, '#555555');
+            
+            ctx.fillStyle = buildingGradient;
+            ctx.fillRect(centerX - buildingWidth/2, groundY - buildingHeight, buildingWidth, buildingHeight);
+            
+            // Windows
+            const windowRows = 12;
+            const windowCols = 4;
+            const windowWidth = 12;
+            const windowHeight = 10;
+            const windowSpacing = 15;
+            
+            for (let row = 0; row < windowRows; row++) {
+                for (let col = 0; col < windowCols; col++) {
+                    const wx = centerX - (windowCols * windowSpacing) / 2 + col * windowSpacing + 8;
+                    const wy = groundY - buildingHeight + 10 + row * 13;
+                    
+                    // Random lit windows
+                    if (Math.random() > 0.3) {
+                        ctx.fillStyle = '#ffff88';
+                    } else {
+                        ctx.fillStyle = '#333333';
+                    }
+                    ctx.fillRect(wx, wy, windowWidth, windowHeight);
+                }
+            }
+            
+            // Roof
+            ctx.fillStyle = '#444444';
+            ctx.beginPath();
+            ctx.moveTo(centerX - buildingWidth/2 - 5, groundY - buildingHeight);
+            ctx.lineTo(centerX, groundY - buildingHeight - 15);
+            ctx.lineTo(centerX + buildingWidth/2 + 5, groundY - buildingHeight);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Antenna
+            ctx.strokeStyle = '#999999';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, groundY - buildingHeight - 15);
+            ctx.lineTo(centerX, groundY - buildingHeight - 35);
+            ctx.stroke();
+            
+            // Antenna light
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.arc(centerX, groundY - buildingHeight - 35, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ground
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.stroke();
+        }
+        
+        // Animation functions
+        function animateUFO(canvasId, stage) {
+            drawUFO(canvasId, stage, true);
+            setTimeout(() => drawUFO(canvasId, stage, false), 1500);
+        }
+        
+        function animateStarship() {
+            drawStarship(true);
+            setTimeout(() => drawStarship(false), 1000);
+        }
+        
+        function animateHuman() {
+            drawHuman(true);
+            setTimeout(() => drawHuman(false), 1000);
+        }
+        
+        // Initial draw
+        drawUFO('ufo1', 1);
+        drawUFO('ufo2', 2);
+        drawUFO('ufo3', 3);
+        drawUFO('ufo4', 4);
+        drawUFO('ufo5', 5);
+        drawStarship();
+        drawHuman();
+        drawBuilding();
+    </script>
+</body>
+</html>
