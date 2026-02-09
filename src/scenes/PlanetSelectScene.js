@@ -1,4 +1,5 @@
 import { PLANETS, PLANET_ORDER, isPlanetUnlocked, getPlanetStars, getPlanetMaxStars, getTotalStars, getMaxTotalStars } from '../data/planets.js';
+import { addSwipeNav, IS_TOUCH } from '../ui/TouchControls.js';
 
 export class PlanetSelectScene extends Phaser.Scene {
   constructor() {
@@ -151,9 +152,16 @@ export class PlanetSelectScene extends Phaser.Scene {
     });
 
     // Hints
-    this.add.text(cx, 575, 'LEFT/RIGHT to navigate  |  SPACE to enter  |  ESC for menu', {
+    this.add.text(cx, 575, IS_TOUCH ? 'SWIPE LEFT/RIGHT, TAP to enter' : 'LEFT/RIGHT to navigate  |  SPACE to enter  |  ESC for menu', {
       fontFamily: 'monospace', fontSize: '11px', color: '#444444'
     }).setOrigin(0.5);
+
+    // Touch: swipe left/right, tap to enter planet
+    addSwipeNav(this, {
+      onLeft: () => { selected.index = Math.max(0, selected.index - 1); updateSelection(); },
+      onRight: () => { selected.index = Math.min(PLANET_ORDER.length - 1, selected.index + 1); updateSelection(); },
+      onTap: () => { enterPlanet(); }
+    });
 
     // UFO flying across
     try {

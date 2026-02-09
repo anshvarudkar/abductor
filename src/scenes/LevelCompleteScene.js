@@ -1,5 +1,6 @@
 import { LEVEL_ORDER, getNextLevel, getPlanetFromLevel } from '../data/levels.js';
 import { PLANETS, getTotalStars, getMaxTotalStars } from '../data/planets.js';
+import { addMenuTouch, IS_TOUCH } from '../ui/TouchControls.js';
 
 export class LevelCompleteScene extends Phaser.Scene {
   constructor() {
@@ -86,26 +87,27 @@ export class LevelCompleteScene extends Phaser.Scene {
     const nextLevel = getNextLevel(this.currentLevel);
     const optY = 430;
 
+    let nextAction;
     if (nextLevel) {
       const nextPlanet = getPlanetFromLevel(nextLevel);
       const nextPlanetData = PLANETS[nextPlanet];
-      const nextLabel = nextPlanet !== this.planet
-        ? `PRESS SPACE FOR ${nextPlanetData.name}`
-        : `PRESS SPACE FOR ${nextLevel.toUpperCase()}`;
+      const nextLabel = IS_TOUCH
+        ? `TAP FOR ${nextPlanet !== this.planet ? nextPlanetData.name : nextLevel.toUpperCase()}`
+        : `PRESS SPACE FOR ${nextPlanet !== this.planet ? nextPlanetData.name : nextLevel.toUpperCase()}`;
 
       const nextText = this.add.text(cx, optY, nextLabel, {
         fontFamily: 'monospace', fontSize: '18px', color: '#00ff88', fontStyle: 'bold'
       }).setOrigin(0.5);
       this.tweens.add({ targets: nextText, alpha: 0.3, duration: 600, yoyo: true, repeat: -1 });
 
-      this.input.keyboard.once('keydown-SPACE', () => {
-        const nextPl = getPlanetFromLevel(nextLevel);
-        if (nextPl !== this.planet) {
+      nextAction = () => {
+        if (nextPlanet !== this.planet) {
           this.scene.start('TransitionScene', { level: nextLevel });
         } else {
           this.scene.start('GameScene', { level: nextLevel });
         }
-      });
+      };
+      this.input.keyboard.once('keydown-SPACE', nextAction);
     } else {
       // After multiverse-1, go to WinScene
       const winText = this.add.text(cx, optY - 10, 'ALL WORLDS CONQUERED!', {
@@ -113,14 +115,15 @@ export class LevelCompleteScene extends Phaser.Scene {
       }).setOrigin(0.5);
       this.tweens.add({ targets: winText, alpha: 0.5, duration: 800, yoyo: true, repeat: -1 });
 
-      const contText = this.add.text(cx, optY + 25, 'PRESS SPACE TO CONTINUE', {
+      const contText = this.add.text(cx, optY + 25, IS_TOUCH ? 'TAP TO CONTINUE' : 'PRESS SPACE TO CONTINUE', {
         fontFamily: 'monospace', fontSize: '16px', color: '#00ff88'
       }).setOrigin(0.5);
       this.tweens.add({ targets: contText, alpha: 0.3, duration: 600, yoyo: true, repeat: -1 });
 
-      this.input.keyboard.once('keydown-SPACE', () => {
+      nextAction = () => {
         this.scene.start('WinScene', { score: runScore, stars: totalStars });
-      });
+      };
+      this.input.keyboard.once('keydown-SPACE', nextAction);
     }
 
     this.add.text(cx, optY + 60, 'R = Replay  |  P = Planet Select  |  M = Menu', {
@@ -136,6 +139,21 @@ export class LevelCompleteScene extends Phaser.Scene {
     this.input.keyboard.once('keydown-M', () => {
       this.scene.start('TitleScene');
     });
+
+    // Touch buttons
+    if (IS_TOUCH) {
+      const btnY = optY + 100;
+      const makeBtn = (x, label, color, action) => {
+        const bg = this.add.rectangle(x, btnY, 120, 40, 0x000000, 0.6).setStrokeStyle(2, color);
+        const txt = this.add.text(x, btnY, label, {
+          fontFamily: 'monospace', fontSize: '13px', color: '#ffffff', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        bg.setInteractive().on('pointerup', action);
+      };
+      makeBtn(cx, 'NEXT', 0x00ff88, nextAction);
+      makeBtn(cx - 180, 'REPLAY', 0xffdd00, () => this.scene.start('GameScene', { level: this.currentLevel }));
+      makeBtn(cx + 180, 'MENU', 0xff6644, () => this.scene.start('TitleScene'));
+    }
 
     this.playLevelCompleteSound();
   }

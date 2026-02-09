@@ -1,3 +1,5 @@
+import { IS_TOUCH } from '../ui/TouchControls.js';
+
 export class LeaderboardScene extends Phaser.Scene {
   constructor() {
     super('LeaderboardScene');
@@ -85,7 +87,7 @@ export class LeaderboardScene extends Phaser.Scene {
     }
 
     // Navigation
-    const backText = this.add.text(cx, 550, 'PRESS ESC OR SPACE FOR MENU', {
+    const backText = this.add.text(cx, 550, IS_TOUCH ? 'TAP FOR MENU' : 'PRESS ESC OR SPACE FOR MENU', {
       fontFamily: 'monospace', fontSize: '14px', color: '#00ff88'
     }).setOrigin(0.5);
     this.tweens.add({ targets: backText, alpha: 0.3, duration: 600, yoyo: true, repeat: -1 });
@@ -104,5 +106,12 @@ export class LeaderboardScene extends Phaser.Scene {
       try { localStorage.removeItem('abductor-leaderboard'); } catch (e) {}
       this.scene.restart();
     });
+
+    // Touch: tap to return to menu
+    if (IS_TOUCH) {
+      const menuBtn = this.add.rectangle(cx, 550, 200, 40, 0x000000, 0)
+        .setInteractive();
+      menuBtn.on('pointerup', () => this.scene.start('TitleScene'));
+    }
   }
 }

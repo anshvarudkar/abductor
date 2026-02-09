@@ -1,5 +1,6 @@
 import { LEVELS, LEVEL_ORDER } from '../data/levels.js';
 import { PLANETS, getPlanetLevels, isLevelUnlocked, getPlanetStars, getPlanetMaxStars } from '../data/planets.js';
+import { addVerticalSwipeNav, IS_TOUCH } from '../ui/TouchControls.js';
 
 export class PlanetLevelSelectScene extends Phaser.Scene {
   constructor() {
@@ -128,8 +129,15 @@ export class PlanetLevelSelectScene extends Phaser.Scene {
     });
 
     // Hints
-    this.add.text(cx, 570, 'UP/DOWN to select  |  SPACE to play  |  ESC to go back', {
+    this.add.text(cx, 570, IS_TOUCH ? 'SWIPE UP/DOWN, TAP to play' : 'UP/DOWN to select  |  SPACE to play  |  ESC to go back', {
       fontFamily: 'monospace', fontSize: '12px', color: '#444444'
     }).setOrigin(0.5);
+
+    // Touch: swipe up/down, tap to play
+    addVerticalSwipeNav(this, {
+      onUp: () => { selected.index = Math.max(0, selected.index - 1); updateSelector(); },
+      onDown: () => { selected.index = Math.min(levels.length - 1, selected.index + 1); updateSelector(); },
+      onTap: () => { startLevel(); }
+    });
   }
 }

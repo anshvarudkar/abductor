@@ -1,4 +1,5 @@
 import { getFurthestPlanet, PLANET_ORDER } from '../data/planets.js';
+import { addVerticalSwipeNav, IS_TOUCH } from '../ui/TouchControls.js';
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -127,9 +128,16 @@ export class TitleScene extends Phaser.Scene {
     });
 
     // Hint
-    this.add.text(cx, 575, 'UP/DOWN + SPACE to select', {
+    this.add.text(cx, 575, IS_TOUCH ? 'SWIPE UP/DOWN, TAP to select' : 'UP/DOWN + SPACE to select', {
       fontFamily: 'monospace', fontSize: '11px', color: '#333333'
     }).setOrigin(0.5);
+
+    // Touch: swipe up/down to navigate, tap to select
+    addVerticalSwipeNav(this, {
+      onUp: () => { selected.index = (selected.index - 1 + menuItems.length) % menuItems.length; updateMenu(); },
+      onDown: () => { selected.index = (selected.index + 1) % menuItems.length; updateMenu(); },
+      onTap: () => { menuItems[selected.index].action(); }
+    });
   }
 
   goToContinue() {

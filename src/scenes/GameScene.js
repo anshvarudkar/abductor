@@ -4,6 +4,7 @@
 
 import { GROWTH_TIERS, TARGET_DEFS, LEVELS, getNextLevel, getPlanetFromLevel } from '../data/levels.js';
 import { PLANETS } from '../data/planets.js';
+import { createGameTouchControls } from '../ui/TouchControls.js';
 
 const ROAD_WIDTH = 40;
 const BLOCK_SIZE = 400;
@@ -80,6 +81,9 @@ export class GameScene extends Phaser.Scene {
 
     this.createSounds();
     this.spawnAmbientParticles();
+
+    // Touch controls (mobile/tablet only)
+    this.touch = createGameTouchControls(this);
 
     // Level name flash
     const planetData = PLANETS[this.planet];
@@ -735,7 +739,17 @@ export class GameScene extends Phaser.Scene {
     if (this.cursors.right.isDown || this.wasd.right.isDown) vx = 1;
     if (this.cursors.up.isDown || this.wasd.up.isDown) vy = -1;
     if (this.cursors.down.isDown || this.wasd.down.isDown) vy = 1;
-    if (vx !== 0 && vy !== 0) { vx *= 0.707; vy *= 0.707; }
+
+    // Touch joystick input
+    if (this.touch) {
+      this.touch.updateShieldJustPressed();
+      if (this.touch.vx !== 0 || this.touch.vy !== 0) {
+        vx = this.touch.vx;
+        vy = this.touch.vy;
+      }
+    }
+
+    if (vx !== 0 && vy !== 0) { const m = 1 / Math.sqrt(vx * vx + vy * vy); vx *= m; vy *= m; }
 
     this.ufo.x = Phaser.Math.Clamp(this.ufo.x + vx * UFO_SPEED * dt, 30, this.WW - 30);
     this.ufo.y = Phaser.Math.Clamp(this.ufo.y + vy * UFO_SPEED * dt, 30, this.WH - 30);
@@ -746,17 +760,19 @@ export class GameScene extends Phaser.Scene {
     const tier = GROWTH_TIERS[this.currentTierIndex];
     this.ufoShadow.setSize(30 * tier.scale, 12 * tier.scale);
 
-    this.beamActive = this.spaceKey.isDown;
+    this.beamActive = this.spaceKey.isDown || (this.touch && this.touch.beam);
     if (this.beamActive && !this._bWas) this.beamSoundOn();
     else if (!this.beamActive && this._bWas) this.beamSoundOff();
     this._bWas = this.beamActive;
 
-    if (this.shootKey.isDown && time - this.lastShootTime > SHOOT_COOLDOWN) {
+    const shootDown = this.shootKey.isDown || (this.touch && this.touch.shoot);
+    if (shootDown && time - this.lastShootTime > SHOOT_COOLDOWN) {
       this.lastShootTime = time;
       this.firePlayerBullet();
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.shieldKey) && this.shieldCooldownTimer <= 0 && !this.shieldActive) {
+    const shieldJust = Phaser.Input.Keyboard.JustDown(this.shieldKey) || (this.touch && this.touch.shieldJustPressed);
+    if (shieldJust && this.shieldCooldownTimer <= 0 && !this.shieldActive) {
       this.activateShield();
     }
   }

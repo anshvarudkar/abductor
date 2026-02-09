@@ -1,5 +1,6 @@
 import { getPlanetFromLevel } from '../data/levels.js';
 import { PLANETS } from '../data/planets.js';
+import { IS_TOUCH } from '../ui/TouchControls.js';
 
 export class GameOverScene extends Phaser.Scene {
   constructor() {
@@ -69,7 +70,7 @@ export class GameOverScene extends Phaser.Scene {
       });
     }
 
-    const retryText = this.add.text(cx, 400, 'PRESS SPACE TO RETRY', {
+    const retryText = this.add.text(cx, 400, IS_TOUCH ? 'TAP TO RETRY' : 'PRESS SPACE TO RETRY', {
       fontFamily: 'monospace', fontSize: '20px', color: '#ff6644', fontStyle: 'bold'
     }).setOrigin(0.5);
     this.tweens.add({ targets: retryText, alpha: 0.3, duration: 600, yoyo: true, repeat: -1 });
@@ -87,6 +88,21 @@ export class GameOverScene extends Phaser.Scene {
     this.input.keyboard.once('keydown-P', () => {
       this.scene.start('PlanetSelectScene');
     });
+
+    // Touch buttons
+    if (IS_TOUCH) {
+      const btnY = 490;
+      const makeBtn = (x, label, color, action) => {
+        const bg = this.add.rectangle(x, btnY, 130, 40, 0x000000, 0.6).setStrokeStyle(2, color);
+        this.add.text(x, btnY, label, {
+          fontFamily: 'monospace', fontSize: '13px', color: '#ffffff', fontStyle: 'bold'
+        }).setOrigin(0.5);
+        bg.setInteractive().on('pointerup', action);
+      };
+      makeBtn(cx, 'RETRY', 0xff6644, () => this.scene.start('GameScene', { level: this.currentLevel }));
+      makeBtn(cx - 160, 'MENU', 0xffdd00, () => this.scene.start('TitleScene'));
+      makeBtn(cx + 160, 'PLANETS', 0x4488ff, () => this.scene.start('PlanetSelectScene'));
+    }
 
     this.playGameOverSound();
   }

@@ -16,6 +16,9 @@ const config = {
   height: 600,
   pixelArt: true,
   roundPixels: true,
+  input: {
+    activePointers: 4,
+  },
   physics: {
     default: 'arcade',
     arcade: {

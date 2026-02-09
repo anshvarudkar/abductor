@@ -108,8 +108,11 @@ export class TransitionScene extends Phaser.Scene {
       this.scene.start('GameScene', { level: this.targetLevel });
     });
 
-    // Allow skip with SPACE
+    // Allow skip with SPACE or tap
     this.input.keyboard.once('keydown-SPACE', () => {
+      this.scene.start('GameScene', { level: this.targetLevel });
+    });
+    this.input.once('pointerup', () => {
       this.scene.start('GameScene', { level: this.targetLevel });
     });
   }

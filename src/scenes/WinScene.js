@@ -1,4 +1,5 @@
 import { getTotalStars, getMaxTotalStars } from '../data/planets.js';
+import { IS_TOUCH } from '../ui/TouchControls.js';
 
 export class WinScene extends Phaser.Scene {
   constructor() {
@@ -115,6 +116,20 @@ export class WinScene extends Phaser.Scene {
       this.saveToLeaderboard(name);
       this.scene.start('LeaderboardScene');
     });
+
+    // Touch: submit button
+    if (IS_TOUCH) {
+      const submitBg = this.add.rectangle(cx, 430, 200, 45, 0x000000, 0.6)
+        .setStrokeStyle(2, 0x00ff88).setInteractive();
+      this.add.text(cx, 430, 'SUBMIT', {
+        fontFamily: 'monospace', fontSize: '18px', color: '#00ff88', fontStyle: 'bold'
+      }).setOrigin(0.5);
+      submitBg.on('pointerup', () => {
+        const name = nameChars.join('').trim() || 'ANON';
+        this.saveToLeaderboard(name);
+        this.scene.start('LeaderboardScene');
+      });
+    }
 
     // Victory sound
     this.playVictorySound();
